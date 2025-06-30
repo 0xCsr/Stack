@@ -124,7 +124,7 @@ static void _destroy(Stack* stack, int freeData) {
 
 		if (temp->data && freeData && stack->destroy_data) {
 			stack->destroy_data(temp->data);
-		} else if (temp->data && freeData) {
+		} else if (temp->data && freeData && !stack->destroy_data) {
 			free(temp->data);
 		}
 		
