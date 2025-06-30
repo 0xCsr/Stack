@@ -7,40 +7,46 @@
  *
  * Este programa:
  * 	- Cria uma pilha dinamicamente
- * 	- Insire 5 inteiros alocados dinamicamente
+ * 	- Insire 5 pessoas alocadas dinamicamente na pilha
  * 	- Acessa o topo com peek
  * 	- Desempilha todos os elementos, liberando a memória.
  * 	- Verifica se a pilha está vazia ao final.
  * */
 
 #include "stack.h"
+#include "person.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
 int main() {
+	char buffer_first_name[128];
+	char buffer_last_name[128];
+
 	Stack* stack = newStack();
 	if (!stack) return -1;
 
-	for (int i = 0; i < 5; i++) {
-		int* value = malloc(sizeof(int));
-		if (!value) {
-			stack->destroy(stack, 1);
+	for (int i = 1; i <= 5; i++) {
+		sprintf(buffer_first_name, "%d", i * 3);
+		sprintf(buffer_last_name, "%d", i * 5);
+		Person* p = newPerson(buffer_first_name, buffer_last_name, i);
+		if (!p) {
 			return -1;
 		}
-		*value = i * 10;
-		stack->push(stack, value);
+		stack->push(stack, p);
 	}
 
-	int* peek = stack->peek(stack);
+	Person* peek = stack->peek(stack);
 	if (peek) {
-		printf("Valor do pico: %d\n", *peek);
+		peek->show(peek);
 	}
 
 	while (!stack->isEmpty(stack)) {
-		int* data = (int*)stack->pop(stack);	
+		Person* data = (Person*)stack->pop(stack);	
 		if (data) {
-			printf("Pop: %d\n", *data);
-			free(data);
+			printf("Pop: first_name: %s\tlast_name: %s\tage: %d\n", data->first_name, data->last_name, data->age);
+			//free(data);
+			data->destroy(data);
 		}
 	}
 

@@ -18,6 +18,8 @@
 #include "debug.h"
 #include "stack.h"
 
+#include "person.h"
+
 static void _push(Stack* stack, void* data);
 static void* _pop(Stack* stack);
 static int _isEmpty(Stack* stack);
@@ -116,7 +118,12 @@ static void _destroy(Stack* stack, int freeData) {
 		stack->top = stack->top->next;
 
 		if (temp->data && freeData) {
-			free(temp->data);
+			//free(temp->data); <- Desalocação simples.
+			
+			// Implementação de desalocação com ponteiros de funções da struct Person.
+			Person* p = (Person*) temp->data;
+			p->destroy(p);
+			free(temp);
 		}
 		
 		free(temp);
