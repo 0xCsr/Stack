@@ -7,6 +7,7 @@ typedef struct Node {
 
 typedef struct Stack {
 	struct Node* top;
+	int count;
 
 	// Aqui estão os ponteiros de função.
 	// Caso queira adicionar novas funções a pilha,
@@ -18,6 +19,8 @@ typedef struct Stack {
 	int	(*isEmpty)(struct Stack*);
 	void	(*destroy)(struct Stack*, int);
 	void*	(*peek)(struct Stack*);
+	int	(*size)(struct Stack*);
+	void	(*destroy_data)(void*); // <- use esse destrutor se quiser um destrutor genérico.
 } Stack;
 
-Stack* newStack();
+Stack* newStack(void (*)(void*));

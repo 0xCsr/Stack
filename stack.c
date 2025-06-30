@@ -18,16 +18,15 @@
 #include "debug.h"
 #include "stack.h"
 
-#include "person.h"
-
 static void _push(Stack* stack, void* data);
 static void* _pop(Stack* stack);
 static int _isEmpty(Stack* stack);
 static void _destroy(Stack* stack, int freeData);
 static void* _peek(Stack* stack);
+static int _size(Stack* stack);
 
 // Cria uma nova pilha (stack) e inicializa seus métodos através dos ponteiros de função.
-Stack* newStack() {
+Stack* newStack(void (*destroy_data)(void*)) {
 	Stack* stack = malloc(sizeof(Stack));
 	
 	if (!stack) {
@@ -36,11 +35,15 @@ Stack* newStack() {
 	}
 
 	stack->top = NULL;
+
+	stack->destroy_data = destroy_data;
+	stack->count = 0;
 	stack->push = &_push;
 	stack->pop = &_pop;
 	stack->isEmpty = &_isEmpty;
 	stack->destroy = &_destroy;
 	stack->peek = &_peek;
+	stack->size = &_size;
 
 	return stack;
 }
@@ -61,6 +64,7 @@ static void _push(Stack* stack, void* data) {
 	node->data = data;
 	node->next = stack->top;
 	stack->top = node;
+	stack->count++;
 
 	DEBUG_PRINT("%s: no adicionado com sucesso.\n", __func__);
 }
@@ -80,6 +84,7 @@ static void* _pop(Stack* stack) {
 
 	void* data = temp->data;
 	stack->top = stack->top->next;
+	stack->count--;
 
 	free(temp);
 
@@ -101,12 +106,12 @@ static int _isEmpty(Stack* stack) {
 // Destrói a pilha liberando todos seus nós.
 // Se a variavel 'freeData' for 1, libera também o conteúdo que os nós apontavam.
 //
-//					ATENÇÃO
-//			Caso os dados apontados não tenham sido alocados
-//			dinamicamente, por exemplo: variáveis locais.
-//			Jamais utilize o 'freeData' igual a 1. Pois isso
-//			vai causar comportamentos indefinido ao tentar
-//				liberar a memória não alocada.
+//			ATENÇÃO
+//	Caso os dados apontados não tenham sido alocados
+//	dinamicamente, por exemplo: variáveis locais.
+//	Jamais utilize o 'freeData' igual a 1. Pois isso
+//	vai causar comportamentos indefinido ao tentar
+//		liberar a memória não alocada.
 static void _destroy(Stack* stack, int freeData) {
 	if (!stack) {
 		DEBUG_PRINT("%s: ponteiro nulo para stack.\n", __func__);
@@ -117,13 +122,10 @@ static void _destroy(Stack* stack, int freeData) {
 		Node* temp = stack->top;
 		stack->top = stack->top->next;
 
-		if (temp->data && freeData) {
-			//free(temp->data); <- Desalocação simples.
-			
-			// Implementação de desalocação com ponteiros de funções da struct Person.
-			Person* p = (Person*) temp->data;
-			p->destroy(p);
-			free(temp);
+		if (temp->data && freeData && stack->destroy_data) {
+			stack->destroy_data(temp->data);
+		} else if (temp->data && freeData) {
+			free(temp->data);
 		}
 		
 		free(temp);
@@ -147,4 +149,8 @@ static void* _peek(Stack* stack) {
 
 	DEBUG_PRINT("%s: topo da stack acessado com sucesso.\n", __func__);
 	return stack->top->data;
+}
+
+static int _size(Stack* stack) {
+	return (stack) ? stack->count : 0;
 }
