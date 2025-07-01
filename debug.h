@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 // Alterne isso para 0 ou 1. Para ativar as logs de depuração.
-#define DEBUG 0
+#define DEBUG 1
 
 #if DEBUG
 	#define DEBUG_PRINT(fmt, ...) fprintf(stderr, fmt, ##__VA_ARGS__)

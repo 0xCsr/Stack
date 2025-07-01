@@ -10,3 +10,4 @@ typedef struct Person {
 } Person;
 
 Person* newPerson(const char*, const char*, const int);
+// void destroyPersonWrapper(Person* p); // <- Método da struct para ponteiro de função genérico do 'destroy_data' da pilha.
