@@ -6,7 +6,7 @@ Uma implementação de **pilha dinâmica genérica** em C, utilizando **ponteiro
 
 ## 🚀 Funcionalidades
 
-A pilha é manipulada por ponteiros de função, permitindo chamadas como stack->push(...). As operações principais são:
+A pilha é manipulada por ponteiros de função, permitindo chamadas como `stack->push(...)`. As operações principais são:
 
 - **`push(stack, void* data)`**  
   Insere um novo elemento no topo da pilha. O dado é armazenado por referência (ponteiro).
