@@ -24,6 +24,7 @@ static int _isEmpty(Stack* stack);
 static void _destroy(Stack* stack, int freeData);
 static void* _peek(Stack* stack);
 static int _size(Stack* stack);
+static void _clear(Stack* stack, int);
 
 // Cria uma nova pilha (stack) e inicializa seus métodos através dos ponteiros de função.
 Stack* newStack(void (*destroy_data)(void*)) {
@@ -44,6 +45,7 @@ Stack* newStack(void (*destroy_data)(void*)) {
 	stack->destroy = &_destroy;
 	stack->peek = &_peek;
 	stack->size = &_size;
+	stack->clear = &_clear;
 
 	return stack;
 }
@@ -118,7 +120,7 @@ static void _destroy(Stack* stack, int freeData) {
 		return;
 	}
 
-	while (stack->top) {
+	while (!stack->isEmpty(stack)) {
 		Node* temp = stack->top;
 		stack->top = stack->top->next;
 
@@ -151,6 +153,36 @@ static void* _peek(Stack* stack) {
 	return stack->top->data;
 }
 
+// Retorna a quantidade de elementos na stack.
 static int _size(Stack* stack) {
 	return (stack) ? stack->count : 0;
+}
+
+// Limpa a stack por completo mas não faz desalocação.
+static void _clear(Stack* stack, int freeData) {
+	if (!stack) {
+		DEBUG_PRINT("%s: ponteiro nulo para stack.\n", __func__);
+		return;
+	}
+
+	if (stack->isEmpty(stack)) {
+		DEBUG_PRINT("%s: a stack ja esta vazia.\n", __func__);
+		return;
+	}
+
+	while (!stack->isEmpty(stack)) {
+		Node* temp = stack->top;
+		stack->top = temp->next;
+
+		if (temp->data && freeData && stack->destroy_data) {
+			stack->destroy_data(temp->data);
+		} else if (temp->data && freeData) {
+			free(temp->data);
+		}
+
+		stack->count = 0;
+		free(temp);
+	}
+
+	DEBUG_PRINT("%s: stack limpa com sucesso.\n", __func__);
 }

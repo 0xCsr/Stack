@@ -20,7 +20,9 @@ typedef struct Stack {
 	void	(*destroy)(struct Stack*, int);
 	void*	(*peek)(struct Stack*);
 	int	(*size)(struct Stack*);
-	void	(*destroy_data)(void*); // <- use esse destrutor se quiser um destrutor genérico.
+	void	(*clear)(struct Stack*, int);
+
+	void	(*destroy_data)(void*);
 } Stack;
 
-Stack* newStack(void (*)(void*));
+Stack* newStack(void (*destroy_data)(void*));

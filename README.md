@@ -23,14 +23,19 @@ A estrutura de pilha é manipulada por meio de ponteiros de função, permitindo
 - **`size(stack)`**  
   Retorna o número de elementos atualmente armazenados na pilha.
 
-- **`destroy(stack, int free_data)`**  
+- **`destroy(stack, int freeData)`**  
   Libera todos os nós e a estrutura da pilha.  
-  - Se `free_data == 1`, a função `destroy_data` será usada para liberar cada conteúdo armazenado.  
-  - Se `free_data == 0`, os ponteiros de dados não serão alterados, apenas os nós e a pilha serão desalocados.
+  - Se `freeData == 1`, a função `destroy_data` será usada para liberar cada conteúdo armazenado.  
+  - Se `freeData == 0`, os ponteiros de dados não serão alterados, apenas os nós e a pilha serão desalocados.
 
 - **`destroy_data(void* data)`**  
   Ponteiro de função opcional que pode ser definido pelo usuário para liberar corretamente os dados da pilha.  
   Deve ser atribuído quando a pilha armazena estruturas complexas que exigem desalocação personalizada.
+
+- ** `clear(stack, int freeData)`**
+    Limpa todos os nós da pilha.
+    - Se `freeData == 1`, a função `clear` será usada para liberar cada conteúdo armazeado através do ponteiro de função `destroy_data`.
+    - Se `freeData == 0`, os ponteiros de dados não serão alterados, apenas os nós serão desalocados.
 
 ---
 
