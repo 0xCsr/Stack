@@ -7,7 +7,7 @@
 
 static void _show(struct Person* p);
 static void _destroy(struct Person* p);
-void destroyPersonWrapper(Person* p);
+void destroyPersonWrapper(void* p);
 
 Person* newPerson(const char* first_name, const char* last_name, const int age) {
 	Person* p = malloc(sizeof(Person));
@@ -75,7 +75,8 @@ static void _destroy(Person* p) {
 	free(p);
 }
 
-void destroyPersonWrapper(Person* p) {
+void destroyPersonWrapper(void* data) {
+	Person* p = (Person*) data;
 	if (p && p->destroy) {
 		_destroy(p);
 	}
