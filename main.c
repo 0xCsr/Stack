@@ -1,4 +1,4 @@
-/*
+/* *
  * main.c
  * Exemplo de uso da pilha genérica em stack.h.
  *
@@ -10,6 +10,7 @@
  * 	- Insire 5 pessoas alocadas dinamicamente na primeira pilha.
  * 	- Insere 5 inteiros alocados dinamicamente na segunda pilha.
  * 	- Acessa o topo da primeira pilha com peek.
+ * 	- Usa o método foreach para mostrar todas pessoas da pilha.
  * 	- Desempilha elementos da primeira pilha, liberando a memória.
  * 	- Verifica se a pilha está vazia ao final.
  * 	- Destrói a primeira pilha e seus dados restantes.
@@ -53,6 +54,9 @@ int main() {
 		peek->show(peek);
 	}
 
+	printf("\n\n\n");
+	stack->foreach(stack, showPersonWrapper);	
+
 	for (int i = 0; i < 3; i++) {
 		if (!stack->isEmpty(stack)) {
 			void* top = (Person*) stack->pop(stack);
@@ -65,6 +69,8 @@ int main() {
 	stack->destroy(stack, 1);
 
 	stack2->clear(stack2, 1);
+	printf("A segunda pilha está vazia? [%s]\n", (stack2->isEmpty(stack2)) ? "sim" : "nao");
+
 	stack2->destroy(stack2, 0);
 
 	return 0;

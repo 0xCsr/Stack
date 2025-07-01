@@ -7,7 +7,9 @@
 
 static void _show(struct Person* p);
 static void _destroy(struct Person* p);
+
 void destroyPersonWrapper(void* p);
+void showPersonWrapper(void* p);
 
 Person* newPerson(const char* first_name, const char* last_name, const int age) {
 	Person* p = malloc(sizeof(Person));
@@ -53,7 +55,7 @@ static void _show(Person* p) {
 		DEBUG_PRINT("%s: ponteiro nulo para pessoa.\n", __func__);
 		return;
 	}
-	printf("_show: Person first name: %s\nPerson last name: %s\nPerson age: %d\n", p->first_name, p->last_name, p->age);
+	printf("Person first name: %s\nPerson last name: %s\nPerson age: %d\n", p->first_name, p->last_name, p->age);
 }
 
 static void _destroy(Person* p) {
@@ -73,11 +75,19 @@ static void _destroy(Person* p) {
 	}
 
 	free(p);
+	p = NULL;
 }
 
 void destroyPersonWrapper(void* data) {
 	Person* p = (Person*) data;
 	if (p && p->destroy) {
 		_destroy(p);
+	}
+}
+
+void showPersonWrapper(void* data) {
+	Person* p = (Person*) data;
+	if (p && p->show) {
+		_show(p);
 	}
 }

@@ -11,10 +11,14 @@
  * 	- peek: acessa o elemento do topo e retorna,
  * 	- isEmpty: verifica se a pilha está vazia,
  * 	- destroy: destrói a pilha, liberando memória, com a opção de liberar também os dados (freeData).
+ * 	- size: retorna a quantidade de elementos da pilha.
+ * 	- clear: limpa todos elementos da pilha. Mas não desaloca a pilha.
+ * 	- foreach: percorre toda a pilha e também faz chamada por (*callback).
  * */
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "debug.h"
 #include "stack.h"
 
@@ -25,6 +29,7 @@ static void _destroy(Stack* stack, int freeData);
 static void* _peek(Stack* stack);
 static int _size(Stack* stack);
 static void _clear(Stack* stack, int);
+static void _foreach(Stack* stack, void (*callback)(void*));
 
 // Cria uma nova pilha (stack) e inicializa seus métodos através dos ponteiros de função.
 Stack* newStack(void (*destroy_data)(void*)) {
@@ -36,9 +41,9 @@ Stack* newStack(void (*destroy_data)(void*)) {
 	}
 
 	stack->top = NULL;
+	stack->count = 0;
 
 	stack->destroy_data = destroy_data;
-	stack->count = 0;
 	stack->push = &_push;
 	stack->pop = &_pop;
 	stack->isEmpty = &_isEmpty;
@@ -46,6 +51,7 @@ Stack* newStack(void (*destroy_data)(void*)) {
 	stack->peek = &_peek;
 	stack->size = &_size;
 	stack->clear = &_clear;
+	stack->foreach = &_foreach;
 
 	return stack;
 }
@@ -128,12 +134,16 @@ static void _destroy(Stack* stack, int freeData) {
 			stack->destroy_data(temp->data);
 		} else if (temp->data && freeData && !stack->destroy_data) {
 			free(temp->data);
+			temp->data = NULL;
 		}
 		
 		free(temp);
+		temp = NULL;
 	}
 	
 	free(stack);
+	stack = NULL;
+
 	DEBUG_PRINT("%s: stack deletada com sucesso.\n", __func__);
 }
 
@@ -155,6 +165,11 @@ static void* _peek(Stack* stack) {
 
 // Retorna a quantidade de elementos na stack.
 static int _size(Stack* stack) {
+	if (!stack) {
+		DEBUG_PRINT("%s: ponteiro nulo para stack.\n", __func__);
+		return 0;
+	}
+
 	return (stack) ? stack->count : 0;
 }
 
@@ -185,4 +200,30 @@ static void _clear(Stack* stack, int freeData) {
 
 	stack->count = 0;
 	DEBUG_PRINT("%s: stack limpa com sucesso.\n", __func__);
+}
+
+// Percorre todos os nós da pilha e chama um ponteiro de função.
+static void _foreach(Stack* stack, void (*callback)(void* data)) {
+	if (!stack) {
+		DEBUG_PRINT("%s: ponteiro nulo para stack.\n", __func__);
+		return;
+	}
+
+	if (stack->isEmpty(stack)) {
+		DEBUG_PRINT("%s: a pilha esta vazia.\n", __func__);
+		return;
+	}
+
+	if (!callback) {
+		DEBUG_PRINT("%s: callback nulo.\n", __func__);
+		return;
+	}
+
+	Node* current = stack->top;
+	while (current) {
+		callback(current->data);
+		current = current->next;
+	}
+
+	DEBUG_PRINT("%s: loop concluido com sucesso.\n", __func__);
 }

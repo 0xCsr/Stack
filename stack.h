@@ -21,6 +21,7 @@ typedef struct Stack {
 	void*	(*peek)(struct Stack*);
 	int	(*size)(struct Stack*);
 	void	(*clear)(struct Stack*, int);
+	void	(*foreach)(struct Stack*, void (*callback)(void*));
 
 	void	(*destroy_data)(void*);
 } Stack;

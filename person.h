@@ -10,4 +10,6 @@ typedef struct Person {
 } Person;
 
 Person* newPerson(const char*, const char*, const int);
-void destroyPersonWrapper(void*); 
+
+void destroyPersonWrapper(void*);
+void showPersonWrapper(void*);
