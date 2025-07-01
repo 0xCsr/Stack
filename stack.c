@@ -180,9 +180,9 @@ static void _clear(Stack* stack, int freeData) {
 			free(temp->data);
 		}
 
-		stack->count = 0;
 		free(temp);
 	}
 
+	stack->count = 0;
 	DEBUG_PRINT("%s: stack limpa com sucesso.\n", __func__);
 }

@@ -12,7 +12,9 @@
  * 	- Acessa o topo da primeira pilha com peek.
  * 	- Desempilha elementos da primeira pilha, liberando a memória.
  * 	- Verifica se a pilha está vazia ao final.
- * 	- Destrói as duas pilhas e seus dados restantes. 
+ * 	- Destrói a primeira pilha e seus dados restantes.
+ * 	- Limpa a segunda pilha.
+ * 	- Destrói a segunda pilha.
  * */
 
 #include "stack.h"
@@ -61,7 +63,9 @@ int main() {
 	printf("A pilha está vazia? [%s]\n", (stack->isEmpty(stack) ? "sim" : "nao"));
 
 	stack->destroy(stack, 1);
-	stack2->destroy(stack2, 1);
+
+	stack2->clear(stack2, 1);
+	stack2->destroy(stack2, 0);
 
 	return 0;
 }
