@@ -21,8 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void destroyPersonWrapper(void* p);
-
 int main() {
 	char buffer_first_name[128];
 	char buffer_last_name[128];
