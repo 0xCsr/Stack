@@ -1,28 +1,42 @@
-# Pilha Dinâmica Genérica em C
+# 📚 Pilha Dinâmica Genérica em C
 
-Implementação de uma pilha dinâmica genérica com uso de ponteiros de função. Simulando conceitos de orientação a objetos em C.  
-
-## Funcionalidades:
-
-    stack->push(stack, (ponteiro para o conteudo)): Adiciona o ponteiro do conteudo no topo da stack.
-
-    stack->pop(stack): Retorna um ponteiro para o conteudo do topo da pilha e desaloca o nó que guardava o conteúdo.
-    
-    stack->isEmpty(stack): Retorna 0 ou 1 para verificar se a pilha está vazia.
-    
-    stack->destroy(stack, (0 ou 1)): Destroi a pilha, caso o valor seja 0, não limpa os dados, apenas a pilha e os nós. Caso seja 1, limpa tudo através do ponteiro de função 'destroy_data'.
-    
-    stack->peek(stack): Retorna o último elemento do topo.
-    
-    stack->size(stack): Retorna a quantidade de elementos da pilha.
-    
-    stack->destroy_data(ponteiro de conteúdo): É utilizado dentro do 'destrutor' da pilha. Para utilizar, basta passar o ponteiro de função do destrutor da sua struct.
+Uma implementação de **pilha dinâmica genérica** em C, utilizando **ponteiros de função** para simular conceitos de **orientação a objetos**. Esta estrutura permite armazenar qualquer tipo de dado, desde que seja passado via ponteiro, garantindo flexibilidade e reusabilidade.
 
 ---
 
-## Como compilar
+## 🚀 Funcionalidades
 
-Use o `make` para compilar o projeto:
+A estrutura de pilha é manipulada por meio de ponteiros de função, permitindo chamadas no estilo `stack->push(...)`. As principais operações disponíveis são:
+
+- **`push(stack, void* data)`**  
+  Insere um novo elemento no topo da pilha. O dado é armazenado por referência (ponteiro).
+
+- **`pop(stack)`**  
+  Remove o elemento do topo da pilha e retorna o ponteiro para os dados. O nó correspondente é desalocado.
+
+- **`peek(stack)`**  
+  Retorna o ponteiro para o elemento do topo, sem removê-lo.
+
+- **`isEmpty(stack)`**  
+  Retorna `1` se a pilha estiver vazia, ou `0` caso contrário.
+
+- **`size(stack)`**  
+  Retorna o número de elementos atualmente armazenados na pilha.
+
+- **`destroy(stack, int free_data)`**  
+  Libera todos os nós e a estrutura da pilha.  
+  - Se `free_data == 1`, a função `destroy_data` será usada para liberar cada conteúdo armazenado.  
+  - Se `free_data == 0`, os ponteiros de dados não serão alterados, apenas os nós e a pilha serão desalocados.
+
+- **`destroy_data(void* data)`**  
+  Ponteiro de função opcional que pode ser definido pelo usuário para liberar corretamente os dados da pilha.  
+  Deve ser atribuído quando a pilha armazena estruturas complexas que exigem desalocação personalizada.
+
+---
+
+## 📦 Como compilar
+
+Certifique-se de ter o `make` instalado. Para compilar o projeto:
 
 ```bash
 make
