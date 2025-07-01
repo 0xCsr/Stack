@@ -32,7 +32,7 @@ A estrutura de pilha é manipulada por meio de ponteiros de função, permitindo
   Ponteiro de função opcional que pode ser definido pelo usuário para liberar corretamente os dados da pilha.  
   Deve ser atribuído quando a pilha armazena estruturas complexas que exigem desalocação personalizada.
 
-- ** `clear(stack, int freeData)`**
+- **`clear(stack, int freeData)`**
     Limpa todos os nós da pilha.
     - Se `freeData == 1`, a função `clear` será usada para liberar cada conteúdo armazeado através do ponteiro de função `destroy_data`.
     - Se `freeData == 0`, os ponteiros de dados não serão alterados, apenas os nós serão desalocados.
