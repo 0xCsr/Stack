@@ -8,6 +8,10 @@ Uma implementação de **pilha dinâmica genérica** em C, utilizando **ponteiro
 
 A pilha é manipulada por ponteiros de função, permitindo chamadas como `stack->push(...)`. As operações principais são:
 
+- **`newStack(void (*destroy_data)(void*))`**
+  Cria uma stack, atribui o ponteiro personalizado de destruição de conteúdo do ponteiro.
+  Caso não queira utilizar, basta chamar a função usando `NULL`.
+
 - **`push(stack, void* data)`**  
   Insere um novo elemento no topo da pilha. O dado é armazenado por referência (ponteiro).
 
@@ -33,9 +37,12 @@ A pilha é manipulada por ponteiros de função, permitindo chamadas como `stack
   Deve ser atribuído quando a pilha armazena estruturas complexas que exigem desalocação personalizada.
 
 - **`clear(stack, int freeData)`**
-    Limpa todos os nós da pilha.
-    - Se `freeData == 1`, a função `clear` será usada para liberar cada conteúdo armazeado através do ponteiro de função `destroy_data`.
-    - Se `freeData == 0`, os ponteiros de dados não serão alterados, apenas os nós serão desalocados.
+  Limpa todos os nós da pilha.
+  - Se `freeData == 1`, a função `clear` será usada para liberar cada conteúdo armazeado através do ponteiro de função `destroy_data`.
+  - Se `freeData == 0`, os ponteiros de dados não serão alterados, apenas os nós serão desalocados.
+
+- **`foreach(stack, void (*callback)(void*))`**
+  Percorre todos os elementos da pilha e faz uma chamada de função através de um ponteiro.
 
 ---
 
