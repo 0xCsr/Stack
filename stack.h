@@ -1,5 +1,7 @@
 #pragma once
 
+#include "array.h"
+
 typedef struct Node {
 	void* data;
 	struct Node* next;
@@ -22,6 +24,9 @@ typedef struct Stack {
 	int	(*size)(struct Stack*);
 	void	(*clear)(struct Stack*, int);
 	void	(*foreach)(struct Stack*, void (*callback)(void*));
+	int 	(*search)(struct Stack*, void*);
+	
+	struct Array*	(*toArray)(struct Stack*);
 
 	void	(*destroy_data)(void*);
 } Stack;

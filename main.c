@@ -20,6 +20,7 @@
 
 #include "stack.h"
 #include "person.h"
+#include "array.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,6 +31,7 @@ int main() {
 
 	Stack* stack = newStack(destroyPersonWrapper);
 	Stack* stack2 = newStack(NULL);
+	int* data;
 
 	if (!stack) return -1;
 
@@ -44,6 +46,9 @@ int main() {
 
 		int* value = malloc(sizeof(int));
 		*value = i + 1;
+		if (i == 1) {
+			data = value;
+		}	
 		stack2->push(stack2, value);
 	}
 	
@@ -64,11 +69,24 @@ int main() {
 		}
 	}
 
+	int pos = stack2->search(stack2, data);
+	printf("stack2: Posicao em %d\n", pos);
+	
+	Array* array = stack2->toArray(stack2);
+	printf("Array criado a partir do stack\n");
+
+	/*Node* temp = array[0];
+	while (temp) {
+		printf("Array: %d\n", *(int*)temp->data);
+		temp = temp->next;
+	}*/
+
 	printf("A pilha está vazia? [%s]\n", (stack->isEmpty(stack) ? "sim" : "nao"));
 
 	stack->destroy(stack, 1);
+	array->destroy(array, 1);
 
-	stack2->clear(stack2, 1);
+	//stack2->clear(stack2, 1);
 	printf("A segunda pilha está vazia? [%s]\n", (stack2->isEmpty(stack2)) ? "sim" : "nao");
 
 	stack2->destroy(stack2, 0);

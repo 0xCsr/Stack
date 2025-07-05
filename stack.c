@@ -21,6 +21,7 @@
 
 #include "debug.h"
 #include "stack.h"
+#include "array.h"
 
 static void _push(Stack* stack, void* data);
 static void* _pop(Stack* stack);
@@ -30,6 +31,8 @@ static void* _peek(Stack* stack);
 static int _size(Stack* stack);
 static void _clear(Stack* stack, int);
 static void _foreach(Stack* stack, void (*callback)(void*));
+static int _search(Stack* stack, void* data);
+static Array* _toArray(Stack* stack);
 
 // Cria uma nova pilha (stack) e inicializa seus métodos através dos ponteiros de função.
 Stack* newStack(void (*destroy_data)(void*)) {
@@ -52,6 +55,8 @@ Stack* newStack(void (*destroy_data)(void*)) {
 	stack->size = &_size;
 	stack->clear = &_clear;
 	stack->foreach = &_foreach;
+	stack->search = &_search;
+	stack->toArray = &_toArray;
 
 	return stack;
 }
@@ -226,4 +231,55 @@ static void _foreach(Stack* stack, void (*callback)(void* data)) {
 	}
 
 	DEBUG_PRINT("%s: loop concluido com sucesso.\n", __func__);
+}
+
+// Busca e retorna a posição do index que se encontra o conteúdo no array.
+static int _search(Stack* stack, void* data) {
+	if (!stack) {
+		DEBUG_PRINT("%s: ponteiro nulo para stack.\n", __func__);
+		return 0;
+	}
+
+	if (!data) {
+		DEBUG_PRINT("%s: ponteiro nulo para data.\n", __func__);
+		return 0;
+	}
+	
+	Node* temp = stack->top;
+	int position = 0;
+
+	while (temp) {
+		if (temp->data && temp->data == data) {
+			return position + 1;
+		}
+
+		position++;
+		temp = temp->next;
+	}
+
+	return -1;
+}
+
+// Converte uma pilha para array.
+static Array* _toArray(Stack* stack) {
+	if (!stack) {
+		DEBUG_PRINT("%s: ponteiro nulo para stack.\n", __func__);
+		return NULL;
+	}
+
+	Array* array = newArray(stack->destroy_data, NULL);
+	if (!array) {
+		DEBUG_PRINT("%s: falha ao alocar memoria para array.\n", __func__);
+		return NULL;
+	}
+
+	Node* temp = stack->top;
+	while (temp) {
+		if (temp) {
+			array->add(array, temp->data);
+		}
+		temp = temp->next;
+	}
+
+	return array;
 }
